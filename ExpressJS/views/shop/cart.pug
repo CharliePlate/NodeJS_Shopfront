@@ -1,0 +1,22 @@
+extends ../layouts/main-layout.pug
+block styles 
+    link(rel="stylesheet", href="/css/cart.css")
+block content
+    main
+        if products.length > 0
+            ul.cart__item-list 
+                each product in products
+                    li.cart__item
+                        h1 #{product.product.title} 
+                        h2 Quantity: #{product.quantity}
+                        form(action="/cart-delete-item" method="POST")
+                            input(type="hidden" value=`${product.product._id}` name="product")
+                            input(type="hidden" value=`${csrfToken}` name="_csrf")
+                            button.btn.danger(type="submit") Delete
+            hr
+            .centered
+                form(action="/cart/order" method="POST")
+                    input(type="hidden" value=`${csrfToken}` name="_csrf")
+                    button.btn(type="submit") Order
+        else 
+            h1 No Products In Cart!
